@@ -5,22 +5,24 @@ var esquema= new Schema({
     institucion:{type: String},
     presidente:{type: String},
     delegado:{type: String},
-    reyna:[{
+    reyna:{
         nombre:{type:String,required:true},
         apellido:{type: String},
         edad:{type:Number},
         ciudad:{type:String},
-        foto:{type:String},
-    }],
+        foto:{
+            type:String}
+    },
     cantidad:{type:Number},
-    danza:[{
+    danza:{
         nombre:String,
         tipo:String,
         foto:{type:String},
-    }],
+    },
     dia:Date,
-    hora:Number,
+    hora:String,
     estado:{type:Boolean,default:true},
+
    
 });
 module.exports=mongoose.model('Fraternidad',esquema);

@@ -3,7 +3,6 @@ var Schema = mongoose.Schema;
 var esquema= new Schema({
     texto:{type:String,required:true},
     fecha:Date,
-    hora:String,
     usuario:[{
         nombre:{type:String,required:true},
         apellido:{type:String},

@@ -44,7 +44,6 @@ router.get('/',Verificar.VerificarToken, function(req, res, next) {
               }
               query.texto=req.body.texto;
               query.fecha=req.body.fecha;
-              query.hora=req.body.hora;
               query.usuario.nombre=req.body.usuario.nombre;
               query.usuario.apellido=req.body.usuario.apellido;
               query.usuario.login=req.body.usuario.login;

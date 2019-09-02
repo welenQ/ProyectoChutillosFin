@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 var Ubicacion=require('../models/ubicacion.model');
 
+var Verificar=require('../middleware/autenticacion');
 
 
-router.get('/', function(req, res, next) {
+router.get('/',Verificar.VerificarToken, function(req, res, next) {
     Ubicacion.find({estado:1},(err,query)=>{
       if(err){
           return res.status(302).json({lista:[],error:err,estado:'fail'});
@@ -15,10 +16,12 @@ router.get('/', function(req, res, next) {
        return res.status(200).json({lista:query,estado:'ok'});
     })
   });
-  router.post('/agregar',async(req,res,next)=>{
+  router.post('/agregar',Verificar.VerificarToken,async(req,res,next)=>{
       let datos=req.body;
       let p=new Ubicacion(datos);
       try{
+          let fe=Date.now();
+          
           let nuevo =await p.save(); 
      
           if(nuevo){
@@ -34,7 +37,7 @@ router.get('/', function(req, res, next) {
   });
   
   
-  router.put('/:id', function (req,res,next){
+  router.put('/:id',Verificar.VerificarToken, function (req,res,next){
       let id=req.params.id;
           Ubicacion.findById(id, async(err,query)=>{
               if(err){
@@ -45,23 +48,28 @@ router.get('/', function(req, res, next) {
               }
               query.lat=req.body.lat;
               query.long=req.body.long;
-              query.detalle.fraternidad.nombre=req.body.detalle.fraternidad.nombre;
-              query.detalle.fraternidad.institucion=req.body.detalle.fraternidad.institucion;
-              query.detalle.fraternidad.presidente=req.body.detalle.fraternidad.presidente;            query.detalle.fraternidad.nombre=req.body.detalle.fraternidad.nombre;
-              query.detalle.fraternidad.delegado=req.body.detalle.fraternidad.delegado;         query.cantidad=req.body.cantidad;
-              query.reyna.nombre=req.body.reyna.nombre;
-              query.reyna.apellido=req.body.reyna.apellido;
-              query.reyna.edad=req.body.reyna.nombre;
-              query.reyna.ciudad=req.body.reyna.ciudad;
-              query.reyna.foto=req.body.reyna.foto;
-              query.danza.nombre=req.body.danza.nombre;
-              query.danza.tipo=req.body.danza.tipo;
-              query.danza.foto=req.body.danza.foto;
-              query.cantidad=req.body.cantidad;
-              query.dia=req.body.dia;
-              query.hora=req.body.hora;
-
-              
+              query.fraternidad.nombre=req.body.fraternidad.nombre;
+              query.fraternidad.institucion=req.body.fraternidad.institucion;
+              query.fraternidad.presidente=req.body.fraternidad.presidente;            
+              query.fraternidad.nombre=req.body.fraternidad.nombre;
+              query.fraternidad.delegado=req.body.fraternidad.delegado;         
+              query.fraternidad.reyna.nombre=req.body.reyna.nombre;
+              query.fraternidad.reyna.apellido=req.body.reyna.apellido;
+              query.fraternidad.reyna.edad=req.body.reyna.nombre;
+              query.fraternidad.reyna.ciudad=req.body.reyna.ciudad;
+              query.fraternidad.reyna.foto=req.body.reyna.foto;
+              query.fraternidad.danza.nombre=req.body.danza.nombre;
+              query.fraternidad.danza.tipo=req.body.danza.tipo;
+              query.fraternidad.danza.foto=req.body.danza.foto;
+              query.fraternidad.cantidad=req.body.fraternidad.cantidad;
+              query.fraternidad.dia=req.body.fraternidad.dia;
+              query.fraternidad.hora=req.body.fraternidad.hora;
+              query.comentario.texto=req.body.comentario.texto;
+              query.comentario.fecha=req.body.comentario.fecha;
+              query.comentario.usuario.nombre=req.body.comentario.usuario.nombre;
+              query.comentario.usuario.apellido=req.body.comentario.usuario.apellido;
+              query.comentario.usuario.login=req.body.comentario.usuario.login;
+              query.comentario.usuario.password=req.body.comentario.usuario.password;
               try{
               let ubi= await query.save();
               return res.status(200).json({lista:ubi,estado:'ok'});
@@ -73,7 +81,7 @@ router.get('/', function(req, res, next) {
               
           });
       });
-      router.get('/borrar/:id',(req,res,next)=>{
+      router.get('/borrar/:id',Verificar.VerificarToken,(req,res,next)=>{
           Ubicacion.findById( req.params.id,(err,info)=>{
               if(err)
                   res.send('error');

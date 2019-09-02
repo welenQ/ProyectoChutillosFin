@@ -41,16 +41,19 @@ router.post('/',Verificar.VerificarToken,(req,res,next)=>{
     });
 });
 router.post('/login', function(req, res, next) {
-  Usuario.find({login:req.body.login},(err,user)=>{
+ 
+ Usuario.find({login:req.body.login},(err,user)=>{
     if(err){
         return res.status(302).json({error:err,estado:'fail'});
     }
     if(user.length==0)
     return res.status(302).json({error:'no existe el usuario', estado:'fail' });
     console.log(req.body.password,user[0].password);
+    
     if(bcrypt.compareSync(req.body.password,user[0].password)){
         let token=jwt.sign({usuario:user[0].login,iat:Math.floor(Date.now()/1000)-30},'afdsdsadafafewre3');
         console.log(user);
+
         return res.status(200).json({usuario:user[0],token:token,estado:'ok'});
     }
     else

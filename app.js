@@ -4,16 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-
+//var formidable= require("express-formidable");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 /////
-var producto = require ('./routes/producto');  
-var venta = require('./routes/venta');
-var compra =require('./routes/compra');
 
-var ventas= require('./routes/ventas');
 var reyna= require('./routes/reyna');
 
 var app = express();
@@ -27,7 +23,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-//CONEXION MONGO DB
+
+
+
 var mongoose=require('mongoose');
 mongoose.connect('mongodb://localhost/proyecto');
 var db=mongoose.connection;
@@ -39,20 +37,28 @@ db.once('open', function(){
   console.log('CONECTADO!');
 });
 
+//app.use(formidable.parse({keepExtensions:true}));
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+
+});
+
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 /////////
-app.use('/api/producto', producto);
-app.use('/venta', venta);
-
-app.use('/api/ventas',require('./routes/ventas') );
-app.use('/compra', compra);
 
 app.use('/api/usuario',require('./routes/usuario'));
 
 app.use('/api/ubicacion',require('./routes/ubicacion'));
 app.use('/api/reyna',reyna);
 app.use('/api/fraternidad',require('./routes/fraternidad'));
+app.use('/api/comentario',require('./routes/comentario'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

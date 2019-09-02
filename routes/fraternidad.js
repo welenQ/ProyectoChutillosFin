@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var Fraternidad= require('../models/fraternidad.model');
+var Verificar=require('../middleware/autenticacion');
 
-router.get('/',Verificar.VerificarToken, function(req, res, next) {
+router.get('/lista',Verificar.VerificarToken, function(req, res, next) {
     Fraternidad.find({estado:1},(err,query)=>{
       if(err){
           return res.status(302).json({lista:[],error:err,estado:'fail'});
@@ -56,8 +57,6 @@ router.get('/',Verificar.VerificarToken, function(req, res, next) {
               query.danza.foto=req.body.danza.foto;
               query.dia=req.body.dia;
               query.hora=req.body.hora;
-
-              
               try{
               let frater= await query.save();
               return res.status(200).json({lista:frater,estado:'ok'});

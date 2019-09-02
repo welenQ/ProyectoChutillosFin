@@ -3,31 +3,41 @@ var Schema = mongoose.Schema;
 var esquema= new Schema({
     lat:{type:String},
     long:{type: String},
-    detalle:[{
+    
         fraternidad:{
             nombre:{type:String},
             institucion:{type: String},
             presidente:{type:String},
-            delegado:{type:String}
-        },
-        reyna:{
+            delegado:{type:String},
+         reyna:{
             nombre:String,
             apellido:String,
             edad:Number,
             ciudad:String,
-            foto:String,
-        }, 
+            foto:{type:String},
+        },
         danza:{
             nombre:String,
             tipo:String,
-            foto:String,
+            foto:[{type:String}],
+        },
+        cantidad:Number,
+        dia:Number,
+        hora:Number
+     },    
+    
+    comentario:{
+        texto:{type:String,required:true},
+        fecha:Date,
+        usuario:{
+            nombre:{type:String,required:true},
+            apellido:{type:String},
+            login:{type:String,required:true},
+            password:{type:String,required:true},
         }
-        
-    }],
-    cantidad:{type:Number, min:0},
-    hora:{type:String},
-    dia:Date,
-    estado:{type:Boolean,default:true},
+    },
+    estado:{type:Boolean,default:true}
+
    
 });
 module.exports=mongoose.model('Ubicacion',esquema);

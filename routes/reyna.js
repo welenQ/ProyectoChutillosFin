@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 var Reyna=require('../models/reyna.model');
 
+var Verificar=require('../middleware/autenticacion');
 /* GET home page. */
-router.get('/',Verificar.VerificarToken, function(req, res, next) {
+router.get('/lista',Verificar.VerificarToken, function(req, res, next) {
   Reyna.find({estado:1},(err,query)=>{
     if(err){
         return res.status(302).json({lista:[],error:err,estado:'fail'});
@@ -14,7 +15,7 @@ router.get('/',Verificar.VerificarToken, function(req, res, next) {
      return res.status(200).json({lista:query,estado:'ok'});
   })
 });
-router.post('/agregar',async(req,res,next)=>{
+router.post('/agregar',Verificar.VerificarToken, async(req,res,next)=>{
     let datos=req.body;
     let p=new Reyna(datos);
     try{
